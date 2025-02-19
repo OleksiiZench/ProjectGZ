@@ -15,10 +15,16 @@ class PROJECT_GZ_API ABase_Main_Character : public ACharacter
 public:
 	ABase_Main_Character();
 
+	virtual void SetupPlayerInputComponent(UInputComponent *PlayerInputComponent) override;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components") UCameraComponent *Camera_Component;
 
 private:
-	UCapsuleComponent *Capsule_Component = nullptr;
+	void Open_Menu();
+	void Move_Forward(float amount);
+	void Move_Right(float value);
+	void Look_X(float value);
+	void Look_Y(float value);
 };
 //------------------------------------------------------------------------------------------------------------
