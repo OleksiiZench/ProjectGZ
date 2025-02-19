@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+
 #include "Base_Main_Menu_Game_Mode.generated.h"
 
 //ABase_Main_Menu_Game_Mode
