@@ -4,15 +4,13 @@
 ABase_Main_Character::ABase_Main_Character()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
+	
 	Camera_Component = CreateDefaultSubobject<UCameraComponent>("Camera_Component");
-	Camera_Component->SetupAttachment(GetRootComponent() );
-
-	bUseControllerRotationPitch = true;
-	bUseControllerRotationYaw = true;
-	bUseControllerRotationRoll = false;
+	Camera_Component->SetupAttachment(GetCapsuleComponent() );
+	Camera_Component->SetRelativeLocation(FVector(8.0f, 0.0f, 90.0f) );
+	Camera_Component->bUsePawnControlRotation = true;
 }
-//------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------1---------------------
 void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);

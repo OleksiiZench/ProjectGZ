@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 
@@ -18,7 +19,7 @@ public:
 	virtual void SetupPlayerInputComponent(UInputComponent *PlayerInputComponent) override;
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components") UCameraComponent *Camera_Component;
+	UPROPERTY(/*VisibleAnywhere,*/ BlueprintReadWrite, Category = "Components") UCameraComponent *Camera_Component;
 
 private:
 	void Open_Menu();
