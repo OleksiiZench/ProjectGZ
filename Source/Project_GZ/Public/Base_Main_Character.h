@@ -19,7 +19,8 @@ public:
 	virtual void SetupPlayerInputComponent(UInputComponent *PlayerInputComponent) override;
 
 protected:
-	UPROPERTY(/*VisibleAnywhere,*/ BlueprintReadWrite, Category = "Components") UCameraComponent *Camera_Component;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components") UCameraComponent *Camera_Component;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations") UAnimationAsset* Walk_Animation;
 
 private:
 	void Open_Menu();
