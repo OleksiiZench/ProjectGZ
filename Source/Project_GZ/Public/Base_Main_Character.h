@@ -4,6 +4,7 @@
 #include "Components/CapsuleComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 #include "Base_Main_Character.generated.h"
 
@@ -20,7 +21,6 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components") UCameraComponent *Camera_Component;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations") UAnimationAsset* Walk_Animation;
 
 private:
 	void Open_Menu();
@@ -28,5 +28,6 @@ private:
 	void Move_Right(float value);
 	void Look_X(float value);
 	void Look_Y(float value);
+	//void Jump();
 };
 //------------------------------------------------------------------------------------------------------------
