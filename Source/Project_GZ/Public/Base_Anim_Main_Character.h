@@ -18,8 +18,5 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations") float Velocity;
-
-private:
-	APawn *OwnerPawn = nullptr;
 };
 //------------------------------------------------------------------------------------------------------------
