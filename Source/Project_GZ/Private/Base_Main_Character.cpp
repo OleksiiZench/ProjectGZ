@@ -1,4 +1,4 @@
-#include "Base_Main_Character.h"
+﻿#include "Base_Main_Character.h"
 
 //------------------------------------------------------------------------------------------------------------
 ABase_Main_Character::ABase_Main_Character()
@@ -13,22 +13,45 @@ ABase_Main_Character::ABase_Main_Character()
 	Walk_Speed = 500.0f;
 	Sprint_Speed = 700.0f;
 	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
- }
-//---------------------------------------------------------------------------------------1---------------------
-void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
+
+	Max_Stamina = 100.0f; // 100 одиниць ~ 5 секунд
+	Stamina_Drain_Rate = 20.0f;
+	Current_Stamina = Max_Stamina;
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Tick(float Delta_Time)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	Super::Tick(Delta_Time);
 
-	PlayerInputComponent->BindAction("Escape", IE_Pressed, this, &ABase_Main_Character::Open_Menu);
+	// 1. Реалізація стаміни
+	if (GetCharacterMovement()->MaxWalkSpeed == Sprint_Speed)
+	{
+		Current_Stamina -= Stamina_Drain_Rate * Delta_Time;
 
-	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ABase_Main_Character::Start_Sprint);
-	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ABase_Main_Character::Stop_Sprint);
+		if (Current_Stamina <= 0.0f)
+		{
+			Current_Stamina = 0.0f;
+			Stop_Sprint();
+		}
+	}
+	else  // Якщо не біжимо, то стаміна відновлюється
+		Current_Stamina = FMath::Min(Current_Stamina + (Stamina_Drain_Rate * 0.5f * Delta_Time), Max_Stamina);
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *Player_Input_Component)
+{
+	Super::SetupPlayerInputComponent(Player_Input_Component);
 
-	PlayerInputComponent->BindAxis("Move_Forward", this, &ABase_Main_Character::Move_Forward);
-	PlayerInputComponent->BindAxis("Move_Right", this, &ABase_Main_Character::Move_Right);
+	Player_Input_Component->BindAction("Escape", IE_Pressed, this, &ABase_Main_Character::Open_Menu);
 
-	PlayerInputComponent->BindAxis("Look_X", this, &ABase_Main_Character::Look_X);
-	PlayerInputComponent->BindAxis("Look_Y", this, &ABase_Main_Character::Look_Y);
+	Player_Input_Component->BindAction("Sprint", IE_Pressed, this, &ABase_Main_Character::Start_Sprint);
+	Player_Input_Component->BindAction("Sprint", IE_Released, this, &ABase_Main_Character::Stop_Sprint);
+
+	Player_Input_Component->BindAxis("Move_Forward", this, &ABase_Main_Character::Move_Forward);
+	Player_Input_Component->BindAxis("Move_Right", this, &ABase_Main_Character::Move_Right);
+
+	Player_Input_Component->BindAxis("Look_X", this, &ABase_Main_Character::Look_X);
+	Player_Input_Component->BindAxis("Look_Y", this, &ABase_Main_Character::Look_Y);
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Open_Menu()

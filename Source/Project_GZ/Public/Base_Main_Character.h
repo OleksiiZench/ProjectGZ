@@ -17,11 +17,14 @@ class PROJECT_GZ_API ABase_Main_Character : public ACharacter
 public:
 	ABase_Main_Character();
 
-	virtual void SetupPlayerInputComponent(UInputComponent *PlayerInputComponent) override;
+	virtual void Tick(float Delta_Time) override;
+	virtual void SetupPlayerInputComponent(UInputComponent *Player_Input_Component) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Walk_Speed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Sprint_Speed;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Stamina_Time;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Max_Stamina;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Current_Stamina;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Stamina_Drain_Rate;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components") UCameraComponent *Camera_Component;
