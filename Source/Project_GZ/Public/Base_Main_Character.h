@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+#include "Base_Anim_Main_Character.h"
+
 #include "Base_Main_Character.generated.h"
 
 //------------------------------------------------------------------------------------------------------------
@@ -17,10 +19,12 @@ class PROJECT_GZ_API ABase_Main_Character : public ACharacter
 public:
 	ABase_Main_Character();
 
+	virtual void BeginPlay() override;
 	virtual void Tick(float Delta_Time) override;
 	virtual void SetupPlayerInputComponent(UInputComponent *Player_Input_Component) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Walk_Speed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Crouch_Speed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Sprint_Speed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Max_Stamina;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Current_Stamina;
@@ -33,9 +37,13 @@ private:
 	void Open_Menu();
 	void Start_Sprint();
 	void Stop_Sprint();
+	void Start_Crouch();
+	void Stop_Crouch();
 	void Move_Forward(float amount);
 	void Move_Right(float value);
 	void Look_X(float value);
 	void Look_Y(float value);
+
+	UBase_Anim_Main_Character *Anim_Main_Character;
 };
 //------------------------------------------------------------------------------------------------------------

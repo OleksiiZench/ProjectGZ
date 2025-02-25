@@ -11,12 +11,22 @@ ABase_Main_Character::ABase_Main_Character()
 	Camera_Component->bUsePawnControlRotation = true;
 
 	Walk_Speed = 500.0f;
+	Crouch_Speed = 300.0f;
 	Sprint_Speed = 700.0f;
 	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
 
 	Max_Stamina = 100.0f; // 100 одиниць ~ 5 секунд
 	Stamina_Drain_Rate = 20.0f;
 	Current_Stamina = Max_Stamina;
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::BeginPlay()
+{
+	Super::BeginPlay();
+
+	Anim_Main_Character = Cast<UBase_Anim_Main_Character>(GetMesh()->GetAnimInstance());
+	if (!Anim_Main_Character)
+		UE_LOG(LogTemp, Error, TEXT("Anim_Main_Character == nullptr! Переконайтеся, що BP_AnimInstance встановлений у Skeletal Mesh.") );
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Tick(float Delta_Time)
@@ -47,6 +57,9 @@ void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *Player_Inp
 	Player_Input_Component->BindAction("Sprint", IE_Pressed, this, &ABase_Main_Character::Start_Sprint);
 	Player_Input_Component->BindAction("Sprint", IE_Released, this, &ABase_Main_Character::Stop_Sprint);
 
+	Player_Input_Component->BindAction("Crouch", IE_Pressed, this, &ABase_Main_Character::Start_Crouch);
+	Player_Input_Component->BindAction("Crouch", IE_Released, this, &ABase_Main_Character::Stop_Crouch);
+	
 	Player_Input_Component->BindAxis("Move_Forward", this, &ABase_Main_Character::Move_Forward);
 	Player_Input_Component->BindAxis("Move_Right", this, &ABase_Main_Character::Move_Right);
 
@@ -61,11 +74,26 @@ void ABase_Main_Character::Open_Menu()
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Start_Sprint()
 {
-	GetCharacterMovement()->MaxWalkSpeed = Sprint_Speed;
+	if (!(Anim_Main_Character->Is_Crawling) )
+		GetCharacterMovement()->MaxWalkSpeed = Sprint_Speed;
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Stop_Sprint()
 {
+	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Start_Crouch()
+{
+	Camera_Component->SetRelativeLocation(FVector(40.0f, 0.0f, 20.0f) );
+	GetCapsuleComponent()->SetCapsuleHalfHeight(50.0f);  // Висота капсули під час присяду
+	GetCharacterMovement()->MaxWalkSpeed = Crouch_Speed;
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Stop_Crouch()
+{
+	Camera_Component->SetRelativeLocation(FVector(20.0f, 0.0f, 85.0f) );
+	GetCapsuleComponent()->SetCapsuleHalfHeight(88.0f); // Капсули в нормальному положенні
 	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
 }
 //------------------------------------------------------------------------------------------------------------
