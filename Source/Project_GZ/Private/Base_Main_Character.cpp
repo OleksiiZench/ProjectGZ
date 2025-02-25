@@ -9,6 +9,10 @@ ABase_Main_Character::ABase_Main_Character()
 	Camera_Component->SetupAttachment(GetCapsuleComponent() );
 	Camera_Component->SetRelativeLocation(FVector(20.0f, 0.0f, 85.0f) );
 	Camera_Component->bUsePawnControlRotation = true;
+
+	Walk_Speed = 500.0f;
+	Sprint_Speed = 700.0f;
+	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
  }
 //---------------------------------------------------------------------------------------1---------------------
 void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
@@ -16,6 +20,9 @@ void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *PlayerInpu
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAction("Escape", IE_Pressed, this, &ABase_Main_Character::Open_Menu);
+
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ABase_Main_Character::Start_Sprint);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ABase_Main_Character::Stop_Sprint);
 
 	PlayerInputComponent->BindAxis("Move_Forward", this, &ABase_Main_Character::Move_Forward);
 	PlayerInputComponent->BindAxis("Move_Right", this, &ABase_Main_Character::Move_Right);
@@ -27,6 +34,16 @@ void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *PlayerInpu
 void ABase_Main_Character::Open_Menu()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Open Menu.") );
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Start_Sprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed = Sprint_Speed;
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Stop_Sprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Move_Forward(float value)

@@ -19,11 +19,17 @@ public:
 
 	virtual void SetupPlayerInputComponent(UInputComponent *PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Walk_Speed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Sprint_Speed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Stamina_Time;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components") UCameraComponent *Camera_Component;
 
 private:
 	void Open_Menu();
+	void Start_Sprint();
+	void Stop_Sprint();
 	void Move_Forward(float amount);
 	void Move_Right(float value);
 	void Look_X(float value);
