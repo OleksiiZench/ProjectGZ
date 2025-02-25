@@ -28,6 +28,5 @@ private:
 	void Move_Right(float value);
 	void Look_X(float value);
 	void Look_Y(float value);
-	//void Jump();
 };
 //------------------------------------------------------------------------------------------------------------
