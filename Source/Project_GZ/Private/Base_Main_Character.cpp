@@ -7,7 +7,7 @@ ABase_Main_Character::ABase_Main_Character()
 	
 	Camera_Component = CreateDefaultSubobject<UCameraComponent>("Camera_Component");
 	Camera_Component->SetupAttachment(GetCapsuleComponent() );
-	Camera_Component->SetRelativeLocation(FVector(20.0f, 0.0f, 85.0f) );
+	Camera_Component->SetRelativeLocation(FVector(13.0f, 0.0f, 75.0f) );
 	Camera_Component->bUsePawnControlRotation = true;
 
 	Walk_Speed = 500.0f;
@@ -18,6 +18,9 @@ ABase_Main_Character::ABase_Main_Character()
 	Max_Stamina = 100.0f; // 100 одиниць ~ 5 секунд
 	Stamina_Drain_Rate = 20.0f;
 	Current_Stamina = Max_Stamina;
+
+	Pause_Menu_Class = nullptr;
+	Is_Paused = false;
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::BeginPlay()
@@ -69,7 +72,50 @@ void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *Player_Inp
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Open_Menu()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Open Menu.") );
+	APlayerController *player_controller;
+
+	if (!Pause_Menu_Class)
+		return;
+
+	//if (!Is_Paused)
+	//{
+		Pause_Menu_Instance = CreateWidget<UUserWidget>(GetWorld(), Pause_Menu_Class);
+		
+		if (Pause_Menu_Instance)
+		{
+			Pause_Menu_Instance->AddToViewport();
+			Pause_Menu_Instance->SetIsFocusable(true);
+		}
+
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
+
+		player_controller = GetWorld()->GetFirstPlayerController();
+		if (player_controller)
+		{
+			player_controller->bShowMouseCursor = true;
+			player_controller->SetInputMode(FInputModeUIOnly() );
+			Pause_Menu_Instance->SetKeyboardFocus();
+		}
+	//}
+	/*else
+	{
+		if (Pause_Menu_Instance)
+			Pause_Menu_Instance->RemoveFromParent);
+
+		UGameplayStatics::SetGamePaused(GetWorld(), false);
+
+		player_controller = GetWorld()->GetFirstPlayerController();
+		if (player_controller)
+		{
+			player_controller->bShowMouseCursor = false;
+			EnableInput(GetWorld()->GetFirstPlayerController());
+			player_controller->SetInputMode(FInputModeGameOnly() );
+		}
+	}*/
+	/*player_controller->bEnableClickEvents = true;
+	player_controller->bEnableMouseOverEvents = true;*/
+
+	//Is_Paused = !Is_Paused;
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Start_Sprint()

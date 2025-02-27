@@ -1,0 +1,54 @@
+#pragma once
+
+#include "Blueprint/UserWidget.h"
+#include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "CoreMinimal.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+
+#include "Base_Anim_Main_Character.h"
+
+#include "Base_Main_Character.generated.h"
+
+//------------------------------------------------------------------------------------------------------------
+UCLASS()
+class PROJECT_GZ_API ABase_Main_Character : public ACharacter
+{
+	GENERATED_BODY()
+
+public:
+	ABase_Main_Character();
+
+	virtual void BeginPlay() override;
+	virtual void Tick(float Delta_Time) override;
+	virtual void SetupPlayerInputComponent(UInputComponent *Player_Input_Component) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Walk_Speed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Crouch_Speed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Sprint_Speed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Max_Stamina;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Current_Stamina;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Stamina_Drain_Rate;
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components") UCameraComponent *Camera_Component;
+	UPROPERTY(EditAnywhere, Category = "UI") TSubclassOf<UUserWidget> Pause_Menu_Class;
+
+private:
+	void Open_Menu();
+	void Start_Sprint();
+	void Stop_Sprint();
+	void Start_Crouch();
+	void Stop_Crouch();
+	void Move_Forward(float amount);
+	void Move_Right(float value);
+	void Look_X(float value);
+	void Look_Y(float value);
+
+	bool Is_Paused;
+	UBase_Anim_Main_Character *Anim_Main_Character;
+	UUserWidget *Pause_Menu_Instance;
+};
+//------------------------------------------------------------------------------------------------------------

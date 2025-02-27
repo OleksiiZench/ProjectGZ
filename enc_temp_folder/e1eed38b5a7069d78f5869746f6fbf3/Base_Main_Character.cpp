@@ -1,0 +1,167 @@
+﻿#include "Base_Main_Character.h"
+
+//------------------------------------------------------------------------------------------------------------
+ABase_Main_Character::ABase_Main_Character()
+{
+	PrimaryActorTick.bCanEverTick = true;
+	
+	Camera_Component = CreateDefaultSubobject<UCameraComponent>("Camera_Component");
+	Camera_Component->SetupAttachment(GetCapsuleComponent() );
+	Camera_Component->SetRelativeLocation(FVector(13.0f, 0.0f, 75.0f) );
+	Camera_Component->bUsePawnControlRotation = true;
+
+	Walk_Speed = 500.0f;
+	Crouch_Speed = 300.0f;
+	Sprint_Speed = 700.0f;
+	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
+
+	Max_Stamina = 100.0f; // 100 одиниць ~ 5 секунд
+	Stamina_Drain_Rate = 20.0f;
+	Current_Stamina = Max_Stamina;
+
+	Pause_Menu_Class = nullptr;
+	Is_Paused = false;
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::BeginPlay()
+{
+	Super::BeginPlay();
+
+	Anim_Main_Character = Cast<UBase_Anim_Main_Character>(GetMesh()->GetAnimInstance());
+	if (!Anim_Main_Character)
+		UE_LOG(LogTemp, Error, TEXT("Anim_Main_Character == nullptr! Переконайтеся, що BP_AnimInstance встановлений у Skeletal Mesh.") );
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Tick(float Delta_Time)
+{
+	Super::Tick(Delta_Time);
+
+	// 1. Реалізація стаміни
+	if (GetCharacterMovement()->MaxWalkSpeed == Sprint_Speed)
+	{
+		Current_Stamina -= Stamina_Drain_Rate * Delta_Time;
+
+		if (Current_Stamina <= 0.0f)
+		{
+			Current_Stamina = 0.0f;
+			Stop_Sprint();
+		}
+	}
+	else  // Якщо не біжимо, то стаміна відновлюється
+		Current_Stamina = FMath::Min(Current_Stamina + (Stamina_Drain_Rate * 0.5f * Delta_Time), Max_Stamina);
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *Player_Input_Component)
+{
+	Super::SetupPlayerInputComponent(Player_Input_Component);
+
+	Player_Input_Component->BindAction("Escape", IE_Pressed, this, &ABase_Main_Character::Open_Menu);
+
+	Player_Input_Component->BindAction("Sprint", IE_Pressed, this, &ABase_Main_Character::Start_Sprint);
+	Player_Input_Component->BindAction("Sprint", IE_Released, this, &ABase_Main_Character::Stop_Sprint);
+
+	Player_Input_Component->BindAction("Crouch", IE_Pressed, this, &ABase_Main_Character::Start_Crouch);
+	Player_Input_Component->BindAction("Crouch", IE_Released, this, &ABase_Main_Character::Stop_Crouch);
+	
+	Player_Input_Component->BindAxis("Move_Forward", this, &ABase_Main_Character::Move_Forward);
+	Player_Input_Component->BindAxis("Move_Right", this, &ABase_Main_Character::Move_Right);
+
+	Player_Input_Component->BindAxis("Look_X", this, &ABase_Main_Character::Look_X);
+	Player_Input_Component->BindAxis("Look_Y", this, &ABase_Main_Character::Look_Y);
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Open_Menu()
+{
+	APlayerController *player_controller;
+
+	if (!Pause_Menu_Class)
+		return;
+
+	if (!Is_Paused)
+	{
+		Pause_Menu_Instance = CreateWidget<UUserWidget>(GetWorld(), Pause_Menu_Class);
+		
+		if (Pause_Menu_Instance)
+		{
+			Pause_Menu_Instance->AddToViewport();
+			Pause_Menu_Instance->SetIsFocusable(true);
+		}
+
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
+
+		player_controller = GetWorld()->GetFirstPlayerController();
+		if (player_controller)
+		{
+			player_controller->bShowMouseCursor = true;
+			player_controller->SetInputMode(FInputModeUIOnly() );
+			Pause_Menu_Instance->SetKeyboardFocus();
+		}
+	}
+	else
+		Is_Paused = !Is_Paused;
+	/*else
+	{
+		if (Pause_Menu_Instance)
+			Pause_Menu_Instance->RemoveFromParent);
+
+		UGameplayStatics::SetGamePaused(GetWorld(), false);
+
+		player_controller = GetWorld()->GetFirstPlayerController();
+		if (player_controller)
+		{
+			player_controller->bShowMouseCursor = false;
+			EnableInput(GetWorld()->GetFirstPlayerController());
+			player_controller->SetInputMode(FInputModeGameOnly() );
+		}
+	}*/
+	/*player_controller->bEnableClickEvents = true;
+	player_controller->bEnableMouseOverEvents = true;*/
+
+	Is_Paused = !Is_Paused;
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Start_Sprint()
+{
+	if (!(Anim_Main_Character->Is_Crawling) )
+		GetCharacterMovement()->MaxWalkSpeed = Sprint_Speed;
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Stop_Sprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Start_Crouch()
+{
+	Camera_Component->SetRelativeLocation(FVector(40.0f, 0.0f, 20.0f) );
+	GetCapsuleComponent()->SetCapsuleHalfHeight(50.0f);  // Висота капсули під час присяду
+	GetCharacterMovement()->MaxWalkSpeed = Crouch_Speed;
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Stop_Crouch()
+{
+	Camera_Component->SetRelativeLocation(FVector(20.0f, 0.0f, 85.0f) );
+	GetCapsuleComponent()->SetCapsuleHalfHeight(88.0f); // Капсули в нормальному положенні
+	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Move_Forward(float value)
+{
+	AddMovementInput(GetActorForwardVector(), value);
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Move_Right(float value)
+{
+	AddMovementInput(GetActorRightVector(), value);
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Look_X(float value)
+{
+	AddControllerYawInput(value);
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Look_Y(float value)
+{
+	AddControllerPitchInput(value);
+}
+//------------------------------------------------------------------------------------------------------------

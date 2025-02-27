@@ -1,10 +1,12 @@
 #pragma once
 
+#include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "Base_Anim_Main_Character.h"
 
@@ -32,6 +34,7 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components") UCameraComponent *Camera_Component;
+	UPROPERTY(EditAnywhere, Category = "UI") TSubclassOf<UUserWidget> Pause_Menu_Class;
 
 private:
 	void Open_Menu();
@@ -45,5 +48,6 @@ private:
 	void Look_Y(float value);
 
 	UBase_Anim_Main_Character *Anim_Main_Character;
+	UUserWidget *Pause_Menu_Instance;
 };
 //------------------------------------------------------------------------------------------------------------
