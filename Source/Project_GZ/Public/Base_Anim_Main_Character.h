@@ -1,7 +1,7 @@
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "CoreMinimal.h"
 
 #include "Base_Anim_Main_Character.generated.h"
 

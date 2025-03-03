@@ -20,7 +20,6 @@ ABase_Main_Character::ABase_Main_Character()
 	Current_Stamina = Max_Stamina;
 
 	Pause_Menu_Class = nullptr;
-	Is_Paused = false;
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::BeginPlay()
@@ -77,45 +76,24 @@ void ABase_Main_Character::Open_Menu()
 	if (!Pause_Menu_Class)
 		return;
 
-	//if (!Is_Paused)
-	//{
-		Pause_Menu_Instance = CreateWidget<UUserWidget>(GetWorld(), Pause_Menu_Class);
-		
-		if (Pause_Menu_Instance)
-		{
-			Pause_Menu_Instance->AddToViewport();
-			Pause_Menu_Instance->SetIsFocusable(true);
-		}
-
-		UGameplayStatics::SetGamePaused(GetWorld(), true);
-
-		player_controller = GetWorld()->GetFirstPlayerController();
-		if (player_controller)
-		{
-			player_controller->bShowMouseCursor = true;
-			player_controller->SetInputMode(FInputModeUIOnly() );
-			Pause_Menu_Instance->SetKeyboardFocus();
-		}
-	//}
-	/*else
+	Pause_Menu_Instance = CreateWidget<UUserWidget>(GetWorld(), Pause_Menu_Class);
+	
+	if (Pause_Menu_Instance)
 	{
-		if (Pause_Menu_Instance)
-			Pause_Menu_Instance->RemoveFromParent);
+		Pause_Menu_Instance->AddToViewport();
+		Pause_Menu_Instance->SetIsFocusable(true);
+	}
 
-		UGameplayStatics::SetGamePaused(GetWorld(), false);
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
 
-		player_controller = GetWorld()->GetFirstPlayerController();
-		if (player_controller)
-		{
-			player_controller->bShowMouseCursor = false;
-			EnableInput(GetWorld()->GetFirstPlayerController());
-			player_controller->SetInputMode(FInputModeGameOnly() );
-		}
-	}*/
-	/*player_controller->bEnableClickEvents = true;
-	player_controller->bEnableMouseOverEvents = true;*/
-
-	//Is_Paused = !Is_Paused;
+	player_controller = GetWorld()->GetFirstPlayerController();
+	
+	if (player_controller)
+	{
+		player_controller->bShowMouseCursor = true;
+		player_controller->SetInputMode(FInputModeUIOnly() );
+		Pause_Menu_Instance->SetKeyboardFocus();
+	}
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Start_Sprint()
@@ -139,7 +117,7 @@ void ABase_Main_Character::Start_Crouch()
 void ABase_Main_Character::Stop_Crouch()
 {
 	Camera_Component->SetRelativeLocation(FVector(20.0f, 0.0f, 85.0f) );
-	GetCapsuleComponent()->SetCapsuleHalfHeight(88.0f); // Капсули в нормальному положенні
+	GetCapsuleComponent()->SetCapsuleHalfHeight(88.0f);  // Висота капсули в нормальному положенні
 	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
 }
 //------------------------------------------------------------------------------------------------------------
