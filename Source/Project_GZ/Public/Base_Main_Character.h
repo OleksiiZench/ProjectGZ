@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "Base_Anim_Main_Character.h"
+#include "Base_Pause_Menu.h"
 
 #include "Base_Main_Character.generated.h"
 
@@ -49,5 +50,6 @@ private:
 
 	UBase_Anim_Main_Character *Anim_Main_Character;
 	UUserWidget *Pause_Menu_Instance;
+	UBase_Pause_Menu *Base_Pause_Menu;
 };
 //------------------------------------------------------------------------------------------------------------

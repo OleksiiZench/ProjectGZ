@@ -71,29 +71,12 @@ void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *Player_Inp
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Open_Menu()
 {
-	APlayerController *player_controller;
-
 	if (!Pause_Menu_Class)
 		return;
 
 	Pause_Menu_Instance = CreateWidget<UUserWidget>(GetWorld(), Pause_Menu_Class);
-	
-	if (Pause_Menu_Instance)
-	{
-		Pause_Menu_Instance->AddToViewport();
-		Pause_Menu_Instance->SetIsFocusable(true);
-	}
-
-	UGameplayStatics::SetGamePaused(GetWorld(), true);
-
-	player_controller = GetWorld()->GetFirstPlayerController();
-	
-	if (player_controller)
-	{
-		player_controller->bShowMouseCursor = true;
-		player_controller->SetInputMode(FInputModeUIOnly() );
-		Pause_Menu_Instance->SetKeyboardFocus();
-	}
+	Base_Pause_Menu = Cast<UBase_Pause_Menu>(Pause_Menu_Instance);
+	Base_Pause_Menu->Pause_Game(Pause_Menu_Instance, GetWorld());
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Start_Sprint()
