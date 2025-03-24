@@ -10,6 +10,7 @@
 
 #include "Base_Anim_Main_Character.h"
 #include "Base_Pause_Menu.h"
+#include "IInteractable.h"
 
 #include "Base_Main_Character.generated.h"
 
@@ -39,6 +40,7 @@ protected:
 
 private:
 	void Open_Menu();
+	void Interact_With();
 	void Start_Sprint();
 	void Stop_Sprint();
 	void Start_Crouch();

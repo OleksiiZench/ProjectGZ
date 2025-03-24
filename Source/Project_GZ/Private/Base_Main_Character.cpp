@@ -56,6 +56,8 @@ void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *Player_Inp
 
 	Player_Input_Component->BindAction("Escape", IE_Pressed, this, &ABase_Main_Character::Open_Menu);
 
+	Player_Input_Component->BindAction("Press_F", IE_Pressed, this, &ABase_Main_Character::Interact_With);
+
 	Player_Input_Component->BindAction("Sprint", IE_Pressed, this, &ABase_Main_Character::Start_Sprint);
 	Player_Input_Component->BindAction("Sprint", IE_Released, this, &ABase_Main_Character::Stop_Sprint);
 
@@ -77,6 +79,28 @@ void ABase_Main_Character::Open_Menu()
 	Pause_Menu_Instance = CreateWidget<UUserWidget>(GetWorld(), Pause_Menu_Class);
 	Base_Pause_Menu = Cast<UBase_Pause_Menu>(Pause_Menu_Instance);
 	Base_Pause_Menu->Pause_Game(Pause_Menu_Instance, GetWorld());
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Interact_With()
+{
+	FVector start;
+	FVector end;
+	FHitResult hit;
+	FCollisionQueryParams params;
+
+	AActor *actor = nullptr;
+	
+	start = Camera_Component->GetComponentLocation();
+	end = start + (Camera_Component->GetForwardVector() * 200.0f);
+
+	params.AddIgnoredActor(this);
+
+	if (GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_Visibility, params) )
+	{
+		actor = hit.GetActor();
+		if (IInteractable *interactable = Cast<IInteractable>(actor ) )
+			interactable->Interact();
+	}
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Start_Sprint()
