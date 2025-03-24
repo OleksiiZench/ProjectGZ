@@ -26,9 +26,18 @@ void ABase_Main_Character::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UUserWidget *Crosshair = nullptr;
+
 	Anim_Main_Character = Cast<UBase_Anim_Main_Character>(GetMesh()->GetAnimInstance());
 	if (!Anim_Main_Character)
 		UE_LOG(LogTemp, Error, TEXT("Anim_Main_Character == nullptr! Переконайтеся, що BP_AnimInstance встановлений у Skeletal Mesh.") );
+
+	if (Crosshair_Widget_Class)
+	{// Додаємо точку по центру екрану
+		Crosshair = CreateWidget<UUserWidget>(GetWorld(), Crosshair_Widget_Class);
+		if (Crosshair)
+			Crosshair->AddToViewport();
+	}
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Tick(float Delta_Time)

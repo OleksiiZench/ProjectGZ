@@ -37,6 +37,7 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components") UCameraComponent *Camera_Component;
 	UPROPERTY(EditAnywhere, Category = "UI") TSubclassOf<UUserWidget> Pause_Menu_Class;
+	UPROPERTY(EditDefaultsOnly, Category = "UI") TSubclassOf<UUserWidget> Crosshair_Widget_Class;
 
 private:
 	void Open_Menu();
