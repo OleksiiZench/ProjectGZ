@@ -6,8 +6,8 @@ ABase_Main_Character::ABase_Main_Character()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	Camera_Component = CreateDefaultSubobject<UCameraComponent>("Camera_Component");
-	Camera_Component->SetupAttachment(GetCapsuleComponent() );
-	Camera_Component->SetRelativeLocation(FVector(13.0f, 0.0f, 75.0f) );
+	Camera_Component->SetupAttachment(GetMesh(), TEXT("Head_Socket") );
+	Camera_Component->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f) );
 	Camera_Component->bUsePawnControlRotation = true;
 
 	Walk_Speed = 500.0f;
@@ -125,14 +125,14 @@ void ABase_Main_Character::Stop_Sprint()
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Start_Crouch()
 {
-	Camera_Component->SetRelativeLocation(FVector(40.0f, 0.0f, 20.0f) );
+	//Camera_Component->SetRelativeLocation(FVector(40.0f, 0.0f, 20.0f) );
 	GetCapsuleComponent()->SetCapsuleHalfHeight(50.0f);  // Висота капсули під час присяду
 	GetCharacterMovement()->MaxWalkSpeed = Crouch_Speed;
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Stop_Crouch()
 {
-	Camera_Component->SetRelativeLocation(FVector(20.0f, 0.0f, 85.0f) );
+	//Camera_Component->SetRelativeLocation(FVector(20.0f, 0.0f, 85.0f) );
 	GetCapsuleComponent()->SetCapsuleHalfHeight(88.0f);  // Висота капсули в нормальному положенні
 	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
 }
