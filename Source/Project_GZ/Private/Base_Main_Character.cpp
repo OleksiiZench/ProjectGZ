@@ -14,6 +14,8 @@ ABase_Main_Character::ABase_Main_Character()
 	Crouch_Speed = 300.0f;
 	Sprint_Speed = 700.0f;
 	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
+	GetCharacterMovement()->MaxWalkSpeedCrouched = Crouch_Speed;
+	GetCharacterMovement()->CrouchedHalfHeight = 30.0f;
 
 	Max_Stamina = 100.0f; // 100 одиниць ~ 5 секунд
 	Stamina_Drain_Rate = 20.0f;
@@ -126,16 +128,18 @@ void ABase_Main_Character::Stop_Sprint()
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Start_Crouch()
 {
-	//Camera_Component->SetRelativeLocation(FVector(40.0f, 0.0f, 20.0f) );
-	GetCapsuleComponent()->SetCapsuleHalfHeight(50.0f);  // Висота капсули під час присяду
-	GetCharacterMovement()->MaxWalkSpeed = Crouch_Speed;
+	//GetCapsuleComponent()->SetCapsuleHalfHeight(50.0f);  // Висота капсули під час присяду
+	//GetCharacterMovement()->MaxWalkSpeed = Crouch_Speed;
+
+	Crouch();
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Stop_Crouch()
 {
-	//Camera_Component->SetRelativeLocation(FVector(20.0f, 0.0f, 85.0f) );
-	GetCapsuleComponent()->SetCapsuleHalfHeight(88.0f);  // Висота капсули в нормальному положенні
-	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
+	//GetCapsuleComponent()->SetCapsuleHalfHeight(88.0f);  // Висота капсули в нормальному положенні
+	//GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
+
+	UnCrouch();
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Move_Forward(float value)
