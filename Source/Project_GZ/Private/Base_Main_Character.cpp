@@ -120,7 +120,8 @@ void ABase_Main_Character::Start_Sprint()
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Stop_Sprint()
 {
-	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
+	if (!(Anim_Main_Character->Is_Crawling) )
+		GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Start_Crouch()
