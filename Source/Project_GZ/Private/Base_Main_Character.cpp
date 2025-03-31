@@ -26,7 +26,7 @@ void ABase_Main_Character::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UUserWidget *Crosshair = nullptr;
+	UUserWidget *crosshair = nullptr;
 
 	Anim_Main_Character = Cast<UBase_Anim_Main_Character>(GetMesh()->GetAnimInstance());
 	if (!Anim_Main_Character)
@@ -34,9 +34,9 @@ void ABase_Main_Character::BeginPlay()
 
 	if (Crosshair_Widget_Class)
 	{// Додаємо точку по центру екрану
-		Crosshair = CreateWidget<UUserWidget>(GetWorld(), Crosshair_Widget_Class);
-		if (Crosshair)
-			Crosshair->AddToViewport();
+		crosshair = CreateWidget<UUserWidget>(GetWorld(), Crosshair_Widget_Class);
+		if (crosshair)
+			crosshair->AddToViewport();
 	}
 }
 //------------------------------------------------------------------------------------------------------------
@@ -87,7 +87,7 @@ void ABase_Main_Character::Open_Menu()
 
 	Pause_Menu_Instance = CreateWidget<UUserWidget>(GetWorld(), Pause_Menu_Class);
 	Base_Pause_Menu = Cast<UBase_Pause_Menu>(Pause_Menu_Instance);
-	Base_Pause_Menu->Pause_Game(Pause_Menu_Instance, GetWorld());
+	Base_Pause_Menu->Pause_Game(Pause_Menu_Instance, GetWorld(), Crosshair_Widget_Class);
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Interact_With()
