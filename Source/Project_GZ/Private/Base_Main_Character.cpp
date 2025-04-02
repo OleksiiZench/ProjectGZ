@@ -14,6 +14,8 @@ ABase_Main_Character::ABase_Main_Character()
 	Crouch_Speed = 300.0f;
 	Sprint_Speed = 700.0f;
 	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
+	GetCharacterMovement()->MaxWalkSpeedCrouched = Crouch_Speed;
+	GetCharacterMovement()->CrouchedHalfHeight = 30.0f;
 
 	Max_Stamina = 100.0f; // 100 одиниць ~ 5 секунд
 	Stamina_Drain_Rate = 20.0f;
@@ -26,7 +28,7 @@ void ABase_Main_Character::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UUserWidget *Crosshair = nullptr;
+	UUserWidget *crosshair = nullptr;
 
 	Anim_Main_Character = Cast<UBase_Anim_Main_Character>(GetMesh()->GetAnimInstance());
 	if (!Anim_Main_Character)
@@ -34,9 +36,9 @@ void ABase_Main_Character::BeginPlay()
 
 	if (Crosshair_Widget_Class)
 	{// Додаємо точку по центру екрану
-		Crosshair = CreateWidget<UUserWidget>(GetWorld(), Crosshair_Widget_Class);
-		if (Crosshair)
-			Crosshair->AddToViewport();
+		crosshair = CreateWidget<UUserWidget>(GetWorld(), Crosshair_Widget_Class);
+		if (crosshair)
+			crosshair->AddToViewport();
 	}
 }
 //------------------------------------------------------------------------------------------------------------
@@ -87,7 +89,7 @@ void ABase_Main_Character::Open_Menu()
 
 	Pause_Menu_Instance = CreateWidget<UUserWidget>(GetWorld(), Pause_Menu_Class);
 	Base_Pause_Menu = Cast<UBase_Pause_Menu>(Pause_Menu_Instance);
-	Base_Pause_Menu->Pause_Game(Pause_Menu_Instance, GetWorld());
+	Base_Pause_Menu->Pause_Game(Pause_Menu_Instance, GetWorld(), Crosshair_Widget_Class);
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Interact_With()
@@ -120,21 +122,24 @@ void ABase_Main_Character::Start_Sprint()
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Stop_Sprint()
 {
-	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
+	if (!(Anim_Main_Character->Is_Crawling) )
+		GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Start_Crouch()
 {
-	//Camera_Component->SetRelativeLocation(FVector(40.0f, 0.0f, 20.0f) );
-	GetCapsuleComponent()->SetCapsuleHalfHeight(50.0f);  // Висота капсули під час присяду
-	GetCharacterMovement()->MaxWalkSpeed = Crouch_Speed;
+	//GetCapsuleComponent()->SetCapsuleHalfHeight(50.0f);  // Висота капсули під час присяду
+	//GetCharacterMovement()->MaxWalkSpeed = Crouch_Speed;
+
+	Crouch();
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Stop_Crouch()
 {
-	//Camera_Component->SetRelativeLocation(FVector(20.0f, 0.0f, 85.0f) );
-	GetCapsuleComponent()->SetCapsuleHalfHeight(88.0f);  // Висота капсули в нормальному положенні
-	GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
+	//GetCapsuleComponent()->SetCapsuleHalfHeight(88.0f);  // Висота капсули в нормальному положенні
+	//GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
+
+	UnCrouch();
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Move_Forward(float value)
