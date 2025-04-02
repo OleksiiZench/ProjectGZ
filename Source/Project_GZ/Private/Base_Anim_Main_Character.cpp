@@ -6,6 +6,9 @@ void UBase_Anim_Main_Character::NativeUpdateAnimation(float Delta_Seconds)
 {
 	Super::NativeUpdateAnimation(Delta_Seconds);
 
+	FVector velocity_vector;
+	FVector move_direction_global;
+
 	if (!Main_Character)
 	{
 		Main_Character = Cast<ABase_Main_Character>(TryGetPawnOwner());
@@ -14,7 +17,11 @@ void UBase_Anim_Main_Character::NativeUpdateAnimation(float Delta_Seconds)
 			return;
 	}
 
-	Velocity = Main_Character->GetVelocity().Size();
+	velocity_vector = Main_Character->GetVelocity();
+	Velocity = velocity_vector.Size();
+
+	move_direction_global = velocity_vector.GetSafeNormal();
+	Move_Direction_Local = Main_Character->GetActorTransform().InverseTransformVector(move_direction_global);
 
 	if ((Main_Character->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() ) < 80.0f)
 		Is_Crawling = true;
