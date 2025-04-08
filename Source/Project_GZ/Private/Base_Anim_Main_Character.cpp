@@ -1,4 +1,4 @@
-#include "Base_Anim_Main_Character.h"
+﻿#include "Base_Anim_Main_Character.h"
 #include "Base_Main_Character.h"
 
 //------------------------------------------------------------------------------------------------------------
@@ -22,6 +22,9 @@ void UBase_Anim_Main_Character::NativeUpdateAnimation(float Delta_Seconds)
 
 	move_direction_global = velocity_vector.GetSafeNormal();
 	Move_Direction_Local = Main_Character->GetActorTransform().InverseTransformVector(move_direction_global);
+
+	if (Move_Direction_Local.X < 0)
+		Velocity *= -1;
 
 	if ((Main_Character->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() ) < 80.0f)
 		Is_Crawling = true;
