@@ -110,7 +110,14 @@ void ABase_Main_Character::Interact_With()
 	{
 		actor = hit.GetActor();
 		if (IInteractable *interactable = Cast<IInteractable>(actor ) )
+		{
+			if (Interact_Montage && !GetMesh()->GetAnimInstance()->Montage_IsPlaying(Interact_Montage) )
+			{// Програємо анім монтаж при взаємодії
+				GetMesh()->GetAnimInstance()->Montage_Play(Interact_Montage, 1.0f);
+			}
+
 			interactable->Interact();
+		}
 	}
 }
 //------------------------------------------------------------------------------------------------------------
@@ -128,17 +135,11 @@ void ABase_Main_Character::Stop_Sprint()
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Start_Crouch()
 {
-	//GetCapsuleComponent()->SetCapsuleHalfHeight(50.0f);  // Висота капсули під час присяду
-	//GetCharacterMovement()->MaxWalkSpeed = Crouch_Speed;
-
 	Crouch();
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Stop_Crouch()
 {
-	//GetCapsuleComponent()->SetCapsuleHalfHeight(88.0f);  // Висота капсули в нормальному положенні
-	//GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
-
 	UnCrouch();
 }
 //------------------------------------------------------------------------------------------------------------

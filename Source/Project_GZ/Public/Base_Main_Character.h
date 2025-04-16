@@ -33,6 +33,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Max_Stamina;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Current_Stamina;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Stamina_Drain_Rate;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation") UAnimMontage *Interact_Montage;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components") UCameraComponent *Camera_Component;
