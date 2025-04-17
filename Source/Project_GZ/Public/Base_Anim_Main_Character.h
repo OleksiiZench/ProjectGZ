@@ -16,14 +16,10 @@ class PROJECT_GZ_API UBase_Anim_Main_Character : public UAnimInstance
 public:
 	virtual void NativeUpdateAnimation(float Delta_Seconds) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations") bool Is_Crawling;
-
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations") bool Is_Falling;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations") float Velocity;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations") FVector Move_Direction_Local;
-
-private:
-	ABase_Main_Character *Main_Character;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character") ABase_Main_Character *Main_Character;
 };
 //------------------------------------------------------------------------------------------------------------

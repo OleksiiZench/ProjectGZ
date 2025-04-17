@@ -59,12 +59,6 @@ void ABase_Main_Character::Tick(float Delta_Time)
 	}
 	else  // Якщо не біжимо, то стаміна відновлюється
 		Current_Stamina = FMath::Min(Current_Stamina + (Stamina_Drain_Rate * 0.5f * Delta_Time), Max_Stamina);
-
-	// 2. Перевірка чи персонаж в присяді
-	if ((GetCapsuleComponent()->GetScaledCapsuleHalfHeight() ) < 80.0f)
-		Is_Crawling = true;
-	else
-		Is_Crawling = false;
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *Player_Input_Component)

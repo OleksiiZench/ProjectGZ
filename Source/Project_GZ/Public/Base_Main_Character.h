@@ -27,6 +27,7 @@ public:
 	virtual void Tick(float Delta_Time) override;
 	virtual void SetupPlayerInputComponent(UInputComponent *Player_Input_Component) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation") bool Is_Crawling;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Walk_Speed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Crouch_Speed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Sprint_Speed;

@@ -28,5 +28,11 @@ void UBase_Anim_Main_Character::NativeUpdateAnimation(float Delta_Seconds)
 	{// Якщо персонаж рухається назад, то швидкість від'ємна (передивитися цю реалізацію, бо є певні баги з Move_Direction_Local)
 		Velocity *= -1;
 	}
+
+	// 2. Перевірка чи персонаж в присяді
+	if ((Main_Character->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() ) < 80.0f)
+		Main_Character->Is_Crawling = true;
+	else
+		Main_Character->Is_Crawling = false;
 }
 //------------------------------------------------------------------------------------------------------------
