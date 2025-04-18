@@ -1,10 +1,11 @@
 ﻿#include "Base_Main_Character.h"
+#include "Base_Player_Controller.h"
 
 //------------------------------------------------------------------------------------------------------------
 ABase_Main_Character::ABase_Main_Character()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	Camera_Component = CreateDefaultSubobject<UCameraComponent>("Camera_Component");
 	Camera_Component->SetupAttachment(GetMesh(), TEXT("Head_Socket") );
 	Camera_Component->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f) );
@@ -21,6 +22,8 @@ ABase_Main_Character::ABase_Main_Character()
 	Stamina_Drain_Rate = 20.0f;
 	Current_Stamina = Max_Stamina;
 
+	PC = Cast<ABase_Player_Controller>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+
 	Pause_Menu_Class = nullptr;
 }
 //------------------------------------------------------------------------------------------------------------
@@ -29,10 +32,6 @@ void ABase_Main_Character::BeginPlay()
 	Super::BeginPlay();
 
 	UUserWidget *crosshair = nullptr;
-
-	Anim_Main_Character = Cast<UBase_Anim_Main_Character>(GetMesh()->GetAnimInstance());
-	if (!Anim_Main_Character)
-		UE_LOG(LogTemp, Error, TEXT("Anim_Main_Character == nullptr! Переконайтеся, що BP_AnimInstance встановлений у Skeletal Mesh.") );
 
 	if (Crosshair_Widget_Class)
 	{// Додаємо точку по центру екрану
@@ -59,12 +58,6 @@ void ABase_Main_Character::Tick(float Delta_Time)
 	}
 	else  // Якщо не біжимо, то стаміна відновлюється
 		Current_Stamina = FMath::Min(Current_Stamina + (Stamina_Drain_Rate * 0.5f * Delta_Time), Max_Stamina);
-
-	// 2. Перевірка чи персонаж в присяді
-	if ((GetCapsuleComponent()->GetScaledCapsuleHalfHeight() ) < 80.0f)
-		Is_Crawling = true;
-	else
-		Is_Crawling = false;
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *Player_Input_Component)
@@ -142,11 +135,17 @@ void ABase_Main_Character::Stop_Sprint()
 void ABase_Main_Character::Start_Crouch()
 {
 	Crouch();
+	Is_Crawling = true;
+
+	PC->Set_View_Pitch();  // Встановлюємо обмеження для камери
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Stop_Crouch()
 {
 	UnCrouch();
+	Is_Crawling = false;
+
+	PC->Set_View_Pitch();  // Прибираємо обмеження для камери
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Move_Forward(float value)

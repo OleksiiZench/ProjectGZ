@@ -14,6 +14,8 @@
 
 #include "Base_Main_Character.generated.h"
 
+class ABase_Player_Controller;
+
 //------------------------------------------------------------------------------------------------------------
 UCLASS()
 class PROJECT_GZ_API ABase_Main_Character : public ACharacter
@@ -53,7 +55,7 @@ private:
 	void Look_X(float value);
 	void Look_Y(float value);
 
-	UBase_Anim_Main_Character *Anim_Main_Character;
+	ABase_Player_Controller *PC;
 	UUserWidget *Pause_Menu_Instance;
 	UBase_Pause_Menu *Base_Pause_Menu;
 };
