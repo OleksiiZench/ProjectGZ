@@ -33,8 +33,9 @@ void ABase_Main_Character::BeginPlay()
 
 	UUserWidget *crosshair = nullptr;
 
+	// 1. Додаємо точку по центру екрану
 	if (Crosshair_Widget_Class)
-	{// Додаємо точку по центру екрану
+	{
 		crosshair = CreateWidget<UUserWidget>(GetWorld(), Crosshair_Widget_Class);
 		if (crosshair)
 			crosshair->AddToViewport();
@@ -43,6 +44,9 @@ void ABase_Main_Character::BeginPlay()
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Tick(float Delta_Time)
 {
+	FVector velocity_vector;
+	FVector move_direction_global;
+
 	Super::Tick(Delta_Time);
 
 	// 1. Реалізація стаміни
@@ -58,6 +62,29 @@ void ABase_Main_Character::Tick(float Delta_Time)
 	}
 	else  // Якщо не біжимо, то стаміна відновлюється
 		Current_Stamina = FMath::Min(Current_Stamina + (Stamina_Drain_Rate * 0.5f * Delta_Time), Max_Stamina);
+
+	// 2. Отримання Velocity та Direction для BlandSpaces
+	velocity_vector = GetVelocity();
+	Character_Velocity = velocity_vector.Size();
+
+	move_direction_global = velocity_vector.GetSafeNormal();
+	Move_Direction_Local = GetActorTransform().InverseTransformVector(move_direction_global);
+
+	if (Move_Direction_Local.X < 0)
+	{// Якщо персонаж рухається назад, то швидкість від'ємна (передивитися цю реалізацію, бо є певні баги з Move_Direction_Local)
+		Character_Velocity *= -1;
+	}
+
+	// 3. Щоб в присяді під об'єктом коректно працювало обмеження камери
+	if (Wants_To_Uncrouch && !GetCharacterMovement()->IsCrouching() )
+	{
+		Wants_To_Uncrouch = false;
+
+		Is_Crawling = false;
+
+		if (PC)
+			PC->Set_View_Pitch();
+	}
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *Player_Input_Component)
@@ -143,9 +170,7 @@ void ABase_Main_Character::Start_Crouch()
 void ABase_Main_Character::Stop_Crouch()
 {
 	UnCrouch();
-	Is_Crawling = false;
-
-	PC->Set_View_Pitch();  // Прибираємо обмеження для камери
+	Wants_To_Uncrouch = true;  // Див. в Tick() в 3 пункті
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Move_Forward(float value)
