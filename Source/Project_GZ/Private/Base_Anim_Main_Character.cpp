@@ -7,10 +7,6 @@ void UBase_Anim_Main_Character::NativeInitializeAnimation()
 	Super::NativeInitializeAnimation();
 
 	if (!Main_Character)
-	{
 		Main_Character = Cast<ABase_Main_Character>(TryGetPawnOwner());
-
-		if (!Main_Character)
-			return;
-	}
 }
+//------------------------------------------------------------------------------------------------------------

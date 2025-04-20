@@ -149,12 +149,17 @@ void ABase_Main_Character::Interact_With()
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Start_Sprint()
 {
-	if (!(Is_Crawling) )
+	UE_LOG(LogTemp, Warning, TEXT("Character_Velocity1 = %f"), Character_Velocity);
+
+	if (!(Is_Crawling) && Character_Velocity >= 0.0f)
 		GetCharacterMovement()->MaxWalkSpeed = Sprint_Speed;
+
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Stop_Sprint()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Character_Velocity2 = %f"), Character_Velocity);
+
 	if (!(Is_Crawling) )
 		GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
 }
