@@ -1,10 +1,11 @@
 ﻿#include "Base_Main_Character.h"
+#include "Base_Player_Controller.h"
 
 //------------------------------------------------------------------------------------------------------------
 ABase_Main_Character::ABase_Main_Character()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	Camera_Component = CreateDefaultSubobject<UCameraComponent>("Camera_Component");
 	Camera_Component->SetupAttachment(GetMesh(), TEXT("Head_Socket") );
 	Camera_Component->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f) );
@@ -21,6 +22,8 @@ ABase_Main_Character::ABase_Main_Character()
 	Stamina_Drain_Rate = 20.0f;
 	Current_Stamina = Max_Stamina;
 
+	PC = Cast<ABase_Player_Controller>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+
 	Pause_Menu_Class = nullptr;
 }
 //------------------------------------------------------------------------------------------------------------
@@ -30,12 +33,9 @@ void ABase_Main_Character::BeginPlay()
 
 	UUserWidget *crosshair = nullptr;
 
-	Anim_Main_Character = Cast<UBase_Anim_Main_Character>(GetMesh()->GetAnimInstance());
-	if (!Anim_Main_Character)
-		UE_LOG(LogTemp, Error, TEXT("Anim_Main_Character == nullptr! Переконайтеся, що BP_AnimInstance встановлений у Skeletal Mesh.") );
-
+	// 1. Додаємо точку по центру екрану
 	if (Crosshair_Widget_Class)
-	{// Додаємо точку по центру екрану
+	{
 		crosshair = CreateWidget<UUserWidget>(GetWorld(), Crosshair_Widget_Class);
 		if (crosshair)
 			crosshair->AddToViewport();
@@ -44,6 +44,9 @@ void ABase_Main_Character::BeginPlay()
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Tick(float Delta_Time)
 {
+	FVector velocity_vector;
+	FVector move_direction_global;
+
 	Super::Tick(Delta_Time);
 
 	// 1. Реалізація стаміни
@@ -59,6 +62,29 @@ void ABase_Main_Character::Tick(float Delta_Time)
 	}
 	else  // Якщо не біжимо, то стаміна відновлюється
 		Current_Stamina = FMath::Min(Current_Stamina + (Stamina_Drain_Rate * 0.5f * Delta_Time), Max_Stamina);
+
+	// 2. Отримання Velocity та Direction для BlandSpaces
+	velocity_vector = GetVelocity();
+	Character_Velocity = velocity_vector.Size();
+
+	move_direction_global = velocity_vector.GetSafeNormal();
+	Move_Direction_Local = GetActorTransform().InverseTransformVector(move_direction_global);
+
+	if (Move_Direction_Local.X < 0)
+	{// Якщо персонаж рухається назад, то швидкість від'ємна (передивитися цю реалізацію, бо є певні баги з Move_Direction_Local)
+		Character_Velocity *= -1;
+	}
+
+	// 3. Щоб в присяді під об'єктом коректно працювало обмеження камери
+	if (Wants_To_Uncrouch && !GetCharacterMovement()->IsCrouching() )
+	{
+		Wants_To_Uncrouch = false;
+
+		Is_Crawling = false;
+
+		if (PC)
+			PC->Set_View_Pitch();
+	}
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *Player_Input_Component)
@@ -110,36 +136,46 @@ void ABase_Main_Character::Interact_With()
 	{
 		actor = hit.GetActor();
 		if (IInteractable *interactable = Cast<IInteractable>(actor ) )
+		{
+			if (Interact_Montage && !GetMesh()->GetAnimInstance()->Montage_IsPlaying(Interact_Montage) )
+			{// Програємо анім монтаж при взаємодії
+				GetMesh()->GetAnimInstance()->Montage_Play(Interact_Montage, 1.0f);
+			}
+
 			interactable->Interact();
+		}
 	}
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Start_Sprint()
 {
-	if (!(Anim_Main_Character->Is_Crawling) )
+	UE_LOG(LogTemp, Warning, TEXT("Character_Velocity1 = %f"), Character_Velocity);
+
+	if (!(Is_Crawling) && Character_Velocity >= 0.0f)
 		GetCharacterMovement()->MaxWalkSpeed = Sprint_Speed;
+
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Stop_Sprint()
 {
-	if (!(Anim_Main_Character->Is_Crawling) )
+	UE_LOG(LogTemp, Warning, TEXT("Character_Velocity2 = %f"), Character_Velocity);
+
+	if (!(Is_Crawling) )
 		GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Start_Crouch()
 {
-	//GetCapsuleComponent()->SetCapsuleHalfHeight(50.0f);  // Висота капсули під час присяду
-	//GetCharacterMovement()->MaxWalkSpeed = Crouch_Speed;
-
 	Crouch();
+	Is_Crawling = true;
+
+	PC->Set_View_Pitch();  // Встановлюємо обмеження для камери
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Stop_Crouch()
 {
-	//GetCapsuleComponent()->SetCapsuleHalfHeight(88.0f);  // Висота капсули в нормальному положенні
-	//GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
-
 	UnCrouch();
+	Wants_To_Uncrouch = true;  // Див. в Tick() в 3 пункті
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Move_Forward(float value)

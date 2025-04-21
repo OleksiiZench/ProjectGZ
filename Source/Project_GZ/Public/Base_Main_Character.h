@@ -14,6 +14,8 @@
 
 #include "Base_Main_Character.generated.h"
 
+class ABase_Player_Controller;
+
 //------------------------------------------------------------------------------------------------------------
 UCLASS()
 class PROJECT_GZ_API ABase_Main_Character : public ACharacter
@@ -27,12 +29,16 @@ public:
 	virtual void Tick(float Delta_Time) override;
 	virtual void SetupPlayerInputComponent(UInputComponent *Player_Input_Component) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation") bool Is_Crawling;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Walk_Speed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Crouch_Speed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Sprint_Speed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Max_Stamina;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Current_Stamina;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Stamina_Drain_Rate;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Character_Velocity;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") FVector Move_Direction_Local;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation") UAnimMontage *Interact_Montage;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components") UCameraComponent *Camera_Component;
@@ -51,7 +57,8 @@ private:
 	void Look_X(float value);
 	void Look_Y(float value);
 
-	UBase_Anim_Main_Character *Anim_Main_Character;
+	bool Wants_To_Uncrouch;
+	ABase_Player_Controller *PC;
 	UUserWidget *Pause_Menu_Instance;
 	UBase_Pause_Menu *Base_Pause_Menu;
 };
