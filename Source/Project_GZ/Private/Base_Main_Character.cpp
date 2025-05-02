@@ -135,11 +135,15 @@ void ABase_Main_Character::Interact_With()
 	if (GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_Visibility, params) )
 	{
 		actor = hit.GetActor();
-		if (IInteractable *interactable = Cast<IInteractable>(actor ) )
+		if (IInteractable *interactable = Cast<IInteractable>(actor) )
 		{
-			if (Interact_Montage && !GetMesh()->GetAnimInstance()->Montage_IsPlaying(Interact_Montage) )
-			{// Програємо анім монтаж при взаємодії
-				GetMesh()->GetAnimInstance()->Montage_Play(Interact_Montage, 1.0f);
+			if (!Cast<ACharacter>(actor) )
+			{// Якщо actor - це Character, то анімація не потрібна
+
+				if (Interact_Montage && !GetMesh()->GetAnimInstance()->Montage_IsPlaying(Interact_Montage) )
+				{// Програємо анім монтаж при взаємодії
+					GetMesh()->GetAnimInstance()->Montage_Play(Interact_Montage, 1.0f);
+				}
 			}
 
 			interactable->Interact();
@@ -149,8 +153,6 @@ void ABase_Main_Character::Interact_With()
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Start_Sprint()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Character_Velocity1 = %f"), Character_Velocity);
-
 	if (!(Is_Crawling) && Character_Velocity >= 0.0f)
 		GetCharacterMovement()->MaxWalkSpeed = Sprint_Speed;
 
@@ -158,8 +160,6 @@ void ABase_Main_Character::Start_Sprint()
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Stop_Sprint()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Character_Velocity2 = %f"), Character_Velocity);
-
 	if (!(Is_Crawling) )
 		GetCharacterMovement()->MaxWalkSpeed = Walk_Speed;
 }
