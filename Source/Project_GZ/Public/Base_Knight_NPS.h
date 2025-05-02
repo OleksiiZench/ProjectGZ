@@ -1,11 +1,11 @@
 #pragma once
 
+#include "Blueprint/UserWidget.h"
+#include "Components/SphereComponent.h"
+#include "Components/WidgetComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Components/WidgetComponent.h"
-#include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
-#include "Components/SphereComponent.h"
 
 #include "IInteractable.h"
 
@@ -20,6 +20,7 @@ class PROJECT_GZ_API ABase_Knight_NPS : public ACharacter, public IInteractable
 public:
 	ABase_Knight_NPS();
 
+	virtual void BeginPlay() override;
 	virtual void Tick(float Delta_Time) override;
 
 	virtual void Interact() override;
@@ -30,6 +31,7 @@ public:
 
 private:
 	bool Is_Overlaping;
+	bool Was_Previously_Overlapping;
 	ACharacter *Main_Character;
 };
 //------------------------------------------------------------------------------------------------------------
