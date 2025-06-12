@@ -25,6 +25,9 @@ public:
 
 	virtual void Interact() override;
 
+	UFUNCTION() void On_Begin_Overlap(AActor *overlapped_actor, AActor *other_actor);
+	UFUNCTION() void On_End_Overlap(AActor *overlapped_actor, AActor *other_actor);
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Widgets") UWidgetComponent* Can_Interact_Widget_Component;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widgets") TSubclassOf<UUserWidget> Can_Interact_Widget_Class;
 	UPROPERTY(VisibleAnywhere, Category = "Components") USphereComponent *Sphere_Component;
