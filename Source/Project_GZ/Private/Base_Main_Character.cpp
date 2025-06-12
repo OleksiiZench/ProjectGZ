@@ -10,6 +10,7 @@ ABase_Main_Character::ABase_Main_Character()
 	Camera_Component->SetupAttachment(GetMesh(), TEXT("Head_Socket") );
 	Camera_Component->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f) );
 	Camera_Component->bUsePawnControlRotation = true;
+	Camera_Component->bConstrainAspectRatio = false;
 
 	Walk_Speed = 500.0f;
 	Crouch_Speed = 300.0f;
@@ -32,6 +33,7 @@ void ABase_Main_Character::BeginPlay()
 	Super::BeginPlay();
 
 	UUserWidget *crosshair = nullptr;
+	TArray<AActor*> found_actors;
 
 	// 1. Додаємо точку по центру екрану
 	if (Crosshair_Widget_Class)
@@ -40,6 +42,15 @@ void ABase_Main_Character::BeginPlay()
 		if (crosshair)
 			crosshair->AddToViewport();
 	}
+
+	// 2. Отримуємо Character_Movement_Component
+	Character_Movement_Component = GetCharacterMovement();
+
+	// 3. Отримуємо перший знайдений ABase_Dialogue_Camera на сцені
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABase_Dialogue_Camera::StaticClass(), found_actors);
+
+	if (found_actors.Num() > 0)
+		Dialogue_Camera = Cast<ABase_Dialogue_Camera>(found_actors[0]);
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Tick(float Delta_Time)
@@ -137,9 +148,20 @@ void ABase_Main_Character::Interact_With()
 		actor = hit.GetActor();
 		if (IInteractable *interactable = Cast<IInteractable>(actor) )
 		{
-			if (!Cast<ACharacter>(actor) )
+			if (Cast<ACharacter>(actor) )
 			{// Якщо actor - це Character, то анімація не потрібна
+				if(PC)
+				{
+					PC->SetViewTargetWithBlend(Dialogue_Camera, 1.0f, EViewTargetBlendFunction::VTBlend_Linear);
+				}
 
+				Camera_Component->Deactivate();
+				Character_Movement_Component->Deactivate();
+				Controller->SetControlRotation(FRotator::ZeroRotator);
+				bUseControllerRotationYaw = false;
+			}
+			else
+			{
 				if (Interact_Montage && !GetMesh()->GetAnimInstance()->Montage_IsPlaying(Interact_Montage) )
 				{// Програємо анім монтаж при взаємодії
 					GetMesh()->GetAnimInstance()->Montage_Play(Interact_Montage, 1.0f);

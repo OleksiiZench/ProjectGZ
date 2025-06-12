@@ -36,21 +36,13 @@ void ABase_Knight_NPS::BeginPlay()
 void ABase_Knight_NPS::Tick(float Delta_Time)
 {
 	Super::Tick(Delta_Time);
-
-	//// 1. Реалізація надпису 'F' коли заходиш в зону актора (Knight_NPS)
-	//if (Main_Character)
-	//	Is_Overlaping = IsOverlappingActor(Main_Character);
-
-	//if (Is_Overlaping != Was_Previously_Overlapping)
-	//{
-	//	Can_Interact_Widget_Component->SetVisibility(Is_Overlaping);
-	//	Was_Previously_Overlapping = Is_Overlaping;
-	//}
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Knight_NPS::Interact()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Knight_NPS") );
+	
+	Can_Interact_Widget_Component->DestroyComponent();
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Knight_NPS::On_Begin_Overlap(AActor *overlapped_actor, AActor *other_actor)
