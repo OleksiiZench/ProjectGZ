@@ -135,8 +135,8 @@ void ABase_Main_Character::Interact_With()
 	FVector end;
 	FHitResult hit;
 	FCollisionQueryParams params;
-
 	AActor *actor = nullptr;
+	ACharacter *npc;
 	
 	start = Camera_Component->GetComponentLocation();
 	end = start + (Camera_Component->GetForwardVector() * 200.0f);
@@ -159,6 +159,30 @@ void ABase_Main_Character::Interact_With()
 				Character_Movement_Component->Deactivate();
 				Controller->SetControlRotation(FRotator::ZeroRotator);
 				bUseControllerRotationYaw = false;
+
+				// Механіка розміщення MC (Main Character) перед NPC
+				npc = Cast<ACharacter>(actor);
+				if (npc)
+				{
+					FVector npc_location = npc->GetActorLocation();
+					FVector npc_forward = npc->GetActorForwardVector();
+
+					// Визначаємо точку перед NPC де буде розміщуватися MC
+					float dictance_from_npc = 200.0f;
+					FVector target_location = npc_location + (npc_forward * dictance_from_npc);
+
+					// Для уникнення провалення
+					target_location.Z = GetActorLocation().Z;
+
+					SetActorLocation(target_location);
+
+					// Повертаємо MC до NPC
+					FVector direction_to_npc = (npc_location - target_location).GetSafeNormal();
+					FRotator target_rotation = direction_to_npc.Rotation();
+					target_rotation.Pitch = 0.0f;
+					target_rotation.Roll = 0.0f;
+					SetActorRotation(target_rotation);
+				}
 			}
 			else
 			{
