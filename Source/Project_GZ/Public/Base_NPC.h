@@ -7,6 +7,7 @@
 
 #include "Base_NPC.generated.h"
 
+//------------------------------------------------------------------------------------------------------------
 UCLASS(Abstract)
 class PROJECT_GZ_API ABase_NPC : public ACharacter
 {
@@ -15,3 +16,4 @@ class PROJECT_GZ_API ABase_NPC : public ACharacter
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue") ABase_Dialogue_Camera *Dialogue_Camera;
 };
+//------------------------------------------------------------------------------------------------------------

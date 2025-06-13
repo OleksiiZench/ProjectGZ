@@ -4,6 +4,7 @@
 #include "UObject/Interface.h"
 #include "IDialogue.generated.h"
 
+// UDialogue
 //------------------------------------------------------------------------------------------------------------
 UINTERFACE(MinimalAPI)
 class UDialogue : public UInterface
