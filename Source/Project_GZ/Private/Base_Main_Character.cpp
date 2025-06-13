@@ -46,11 +46,11 @@ void ABase_Main_Character::BeginPlay()
 	// 2. Отримуємо Character_Movement_Component
 	Character_Movement_Component = GetCharacterMovement();
 
-	// 3. Отримуємо перший знайдений ABase_Dialogue_Camera на сцені
+	// 3. Отримуємо перший знайдений ABase_Dialogue_Camera на сцені для встановлення дефолтної камери
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABase_Dialogue_Camera::StaticClass(), found_actors);
 
 	if (found_actors.Num() > 0)
-		Dialogue_Camera = Cast<ABase_Dialogue_Camera>(found_actors[0]);
+		Default_Dialogue_Camera = Cast<ABase_Dialogue_Camera>(found_actors[0]);
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Tick(float Delta_Time)
@@ -136,7 +136,7 @@ void ABase_Main_Character::Interact_With()
 	FHitResult hit;
 	FCollisionQueryParams params;
 	AActor *actor = nullptr;
-	ACharacter *npc;
+	ACharacter *character_npc;
 	
 	start = Camera_Component->GetComponentLocation();
 	end = start + (Camera_Component->GetForwardVector() * 200.0f);
@@ -148,11 +148,22 @@ void ABase_Main_Character::Interact_With()
 		actor = hit.GetActor();
 		if (IInteractable *interactable = Cast<IInteractable>(actor) )
 		{
-			if (Cast<ACharacter>(actor) )
+			character_npc = Cast<ACharacter>(actor);
+			if (character_npc)
 			{// Якщо actor - це Character, то анімація не потрібна
-				if(PC)
+				if (PC)
 				{
-					PC->SetViewTargetWithBlend(Dialogue_Camera, 1.0f, EViewTargetBlendFunction::VTBlend_Linear);
+					ABase_NPC *npc = Cast<ABase_NPC>(character_npc);
+
+					ABase_Dialogue_Camera *target_camera;
+					if (npc && npc->Dialogue_Camera)
+					{// Якщо існує камера в npc, то ставимо камеру npc, якщо ні, то дефолтну
+						target_camera = npc->Dialogue_Camera;
+					}
+					else
+						target_camera = Default_Dialogue_Camera;
+
+					PC->SetViewTargetWithBlend(target_camera, 1.0f, EViewTargetBlendFunction::VTBlend_Linear);
 				}
 
 				Camera_Component->Deactivate();
@@ -161,11 +172,10 @@ void ABase_Main_Character::Interact_With()
 				bUseControllerRotationYaw = false;
 
 				// Механіка розміщення MC (Main Character) перед NPC
-				npc = Cast<ACharacter>(actor);
-				if (npc)
+				if (character_npc)
 				{
-					FVector npc_location = npc->GetActorLocation();
-					FVector npc_forward = npc->GetActorForwardVector();
+					FVector npc_location = character_npc->GetActorLocation();
+					FVector npc_forward = character_npc->GetActorForwardVector();
 
 					// Визначаємо точку перед NPC де буде розміщуватися MC
 					float dictance_from_npc = 200.0f;

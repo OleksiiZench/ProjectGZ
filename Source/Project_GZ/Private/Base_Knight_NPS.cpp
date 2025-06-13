@@ -21,6 +21,9 @@ ABase_Knight_NPS::ABase_Knight_NPS()
 		Can_Interact_Widget_Component->SetWidgetClass(Can_Interact_Widget_Class);
 
 	Can_Interact_Widget_Component->SetDrawSize(FVector2D(200.0f, 50.0f));
+
+	// 3. Init Dialogue_Camera	
+	Dialogue_Camera = nullptr;
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Knight_NPS::BeginPlay()
@@ -31,6 +34,9 @@ void ABase_Knight_NPS::BeginPlay()
 
 	OnActorBeginOverlap.AddDynamic(this, &ABase_Knight_NPS::On_Begin_Overlap);
 	OnActorEndOverlap.AddDynamic(this, &ABase_Knight_NPS::On_End_Overlap);
+
+	if (!Dialogue_Camera)
+		UE_LOG(LogTemp, Warning, TEXT("Dialogue camera not set for %s"), *GetName() );
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Knight_NPS::Tick(float Delta_Time)
@@ -42,18 +48,19 @@ void ABase_Knight_NPS::Interact()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Knight_NPS") );
 	
-	Can_Interact_Widget_Component->DestroyComponent();
+	if (Can_Interact_Widget_Component)
+		Can_Interact_Widget_Component->SetVisibility(false);
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Knight_NPS::On_Begin_Overlap(AActor *overlapped_actor, AActor *other_actor)
 {
-	if(other_actor == Main_Character)
+	if(other_actor == Main_Character && Can_Interact_Widget_Component)
 		Can_Interact_Widget_Component->SetVisibility(true);
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Knight_NPS::On_End_Overlap(AActor *overlapped_actor, AActor *other_actor)
 {
-	if(other_actor == Main_Character)
+	if(other_actor == Main_Character && Can_Interact_Widget_Component)
 		Can_Interact_Widget_Component->SetVisibility(false);
 }
 //------------------------------------------------------------------------------------------------------------

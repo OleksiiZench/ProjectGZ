@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "Base_NPC.h"
 #include "Base_Anim_Main_Character.h"
 #include "Base_Dialogue_Camera.h"
 #include "Base_Pause_Menu.h"
@@ -46,7 +47,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components") UCharacterMovementComponent *Character_Movement_Component;
 	UPROPERTY(EditAnywhere, Category = "UI") TSubclassOf<UUserWidget> Pause_Menu_Class;
 	UPROPERTY(EditDefaultsOnly, Category = "UI") TSubclassOf<UUserWidget> Crosshair_Widget_Class;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue") ABase_Dialogue_Camera *Dialogue_Camera;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue") ABase_Dialogue_Camera *Default_Dialogue_Camera;
 
 private:
 	void Open_Menu();
