@@ -11,6 +11,7 @@ void UDialogue_Manager::Start_Dialogue(ABase_Knight_NPS *npc, UDataTable *dialog
 
 	Current_NPC = npc;
 	Current_Dialogue_Table = dialogue_table;
+	
 
 	if (UWorld *world = npc->GetWorld() )
 	{
@@ -20,7 +21,7 @@ void UDialogue_Manager::Start_Dialogue(ABase_Knight_NPS *npc, UDataTable *dialog
 			Dialogue_Widget->AddToViewport();
 			Dialogue_Widget->On_Option_Selected.AddDynamic(this, &UDialogue_Manager::Advance_Dialogue);
 			Dialogue_Widget->On_Dialogue_Ended.AddDynamic(this, &UDialogue_Manager::End_Dialogue);
-			Show_Dialogue_Node(1);
+			Show_Dialogue_Node(0);
 		}
 	}
 }

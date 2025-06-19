@@ -193,6 +193,9 @@ void ABase_Main_Character::Interact_With()
 					target_rotation.Roll = 0.0f;
 					SetActorRotation(target_rotation);
 				}
+
+				PC->bShowMouseCursor = true;
+				PC->SetInputMode(FInputModeUIOnly() );
 			}
 			else
 			{

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Blueprint/UserWidget.h"
 #include "Components/SphereComponent.h"
@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "Base_NPC.h"
+//#include "Dialogue_Manager.h" //перенесено до Base_Knight_NPS.h
 #include "IInteractable.h"
 
 #include "Base_Knight_NPS.generated.h"
@@ -32,6 +33,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Widgets") UWidgetComponent *Can_Interact_Widget_Component;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widgets") TSubclassOf<UUserWidget> Can_Interact_Widget_Class;
 	UPROPERTY(VisibleAnywhere, Category = "Components") USphereComponent *Sphere_Component;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue") UDataTable *Dialogue_Table;
 
 private:
 	bool Is_Overlaping;
