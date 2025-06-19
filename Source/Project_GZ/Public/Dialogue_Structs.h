@@ -12,7 +12,7 @@ struct FDialogue_Option
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Nex_Node_ID;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Next_Node_ID;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) FText Option_Text;
 };
 //------------------------------------------------------------------------------------------------------------
