@@ -5,11 +5,9 @@
 #include "UObject/NoExportTypes.h"
 
 #include "Base_Main_Character.h"
+#include "Base_NPC.h"
 #include "Dialogue_Structs.h"
 #include "Dialogue_Widget.h"
-
-// temp include
-#include "Base_Knight_NPS.h"
 
 #include "Dialogue_Manager.generated.h"
 
@@ -20,7 +18,7 @@ class PROJECT_GZ_API UDialogue_Manager : public UObject
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(BlueprintCallable) void Start_Dialogue(ABase_Knight_NPS *npc, UDataTable *dialogue_table);
+	UFUNCTION(BlueprintCallable) void Start_Dialogue(ABase_NPC *npc, UDataTable *dialogue_table);
 	UFUNCTION(BlueprintCallable) void Advance_Dialogue(int32 next_node_id);
 	UFUNCTION(BlueprintCallable) void End_Dialogue();
 
@@ -31,6 +29,6 @@ private:
 
 	UPROPERTY() UDialogue_Widget *Dialogue_Widget;
 	UPROPERTY() UDataTable *Current_Dialogue_Table;
-	UPROPERTY() ABase_Knight_NPS *Current_NPC;
+	UPROPERTY() ABase_NPC *Current_NPC;
 };
 //------------------------------------------------------------------------------------------------------------

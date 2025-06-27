@@ -1,7 +1,7 @@
 ﻿#include "Dialogue_Manager.h"
 
 //------------------------------------------------------------------------------------------------------------
-void UDialogue_Manager::Start_Dialogue(ABase_Knight_NPS *npc, UDataTable *dialogue_table)
+void UDialogue_Manager::Start_Dialogue(ABase_NPC *npc, UDataTable *dialogue_table)
 {
 	if (!npc || !dialogue_table)
 	{
