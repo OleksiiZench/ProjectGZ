@@ -1,6 +1,6 @@
 ﻿#include "Base_Main_Character.h"
-#include "Base_Player_Controller.h"
 #include "Base_NPC.h"
+#include "Base_Player_Controller.h"
 
 //------------------------------------------------------------------------------------------------------------
 ABase_Main_Character::ABase_Main_Character()
@@ -97,10 +97,6 @@ void ABase_Main_Character::Tick(float Delta_Time)
 		if (PC)
 			PC->Set_View_Pitch();
 	}
-
-	// 4. Temp
-	/*FRotator current_rotation = GetActorRotation();
-	UE_LOG(LogTemp, Warning, TEXT("Rotation MC: %s"), *current_rotation.ToString() )*/
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *Player_Input_Component)
@@ -210,10 +206,6 @@ void ABase_Main_Character::Interact_With()
 
 					Target_Rotation = target_rotation;
 				}
-
-				// тимчасово налаштування введення перенесено до Dialogue_Manager у Start_Dialogue
-				//PC->bShowMouseCursor = true;
-				//PC->SetInputMode(FInputModeUIOnly() );
 			}
 			else
 			{

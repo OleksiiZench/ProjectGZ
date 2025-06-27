@@ -20,7 +20,7 @@ public:
 
 
 
-//AEmptyPawn
+//ANone_Pawn
 //------------------------------------------------------------------------------------------------------------
 UCLASS()
 class PROJECT_GZ_API ANone_Pawn : public APawn

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Interface.h"
 #include "IInteractable.generated.h"
+#include "UObject/Interface.h"
 
 // UInteractable
 //------------------------------------------------------------------------------------------------------------

@@ -1,11 +1,10 @@
 ﻿#pragma once
 
 #include "Blueprint/UserWidget.h"
-#include "GameFramework/Character.h"
 #include "CoreMinimal.h"
+#include "GameFramework/Character.h"
 
 #include "Base_NPC.h"
-//#include "Dialogue_Manager.h" //перенесено до Base_Knight_NPS.h
 #include "IInteractable.h"
 
 #include "Base_Knight_NPS.generated.h"
