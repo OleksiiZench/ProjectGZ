@@ -1,5 +1,6 @@
 ﻿#include "Base_Main_Character.h"
 #include "Base_Player_Controller.h"
+#include "Base_NPC.h"
 
 //------------------------------------------------------------------------------------------------------------
 ABase_Main_Character::ABase_Main_Character()

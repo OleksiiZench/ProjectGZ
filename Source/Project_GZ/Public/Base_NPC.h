@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "Base_Dialogue_Camera.h"
+#include "Dialogue_Manager.h"
 
 #include "Base_NPC.generated.h"
 
@@ -28,6 +29,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Widgets") UWidgetComponent *Can_Interact_Widget_Component;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widgets") TSubclassOf<UUserWidget> Can_Interact_Widget_Class;
 	UPROPERTY(VisibleAnywhere, Category = "Components") USphereComponent *Sphere_Component;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue") UDataTable *Dialogue_Table;
 
 private:
 	ACharacter *Main_Character;

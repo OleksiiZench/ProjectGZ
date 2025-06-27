@@ -19,17 +19,6 @@ class PROJECT_GZ_API ABase_Knight_NPS : public ABase_NPC, public IInteractable
 public:
 	ABase_Knight_NPS();
 
-	virtual void BeginPlay() override;
-	virtual void Tick(float Delta_Time) override;
-
 	virtual void Interact() override;
-
-	
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue") UDataTable *Dialogue_Table;
-
-private:
-	bool Is_Overlaping;
-	bool Was_Previously_Overlapping;
 };
 //------------------------------------------------------------------------------------------------------------

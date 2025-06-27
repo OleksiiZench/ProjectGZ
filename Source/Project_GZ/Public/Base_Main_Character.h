@@ -8,7 +8,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 
-#include "Base_NPC.h"
 #include "Base_Anim_Main_Character.h"
 #include "Base_Dialogue_Camera.h"
 #include "Base_Pause_Menu.h"

@@ -5,7 +5,6 @@
 #include "UObject/NoExportTypes.h"
 
 #include "Base_Main_Character.h"
-#include "Base_NPC.h"
 #include "Dialogue_Structs.h"
 #include "Dialogue_Widget.h"
 

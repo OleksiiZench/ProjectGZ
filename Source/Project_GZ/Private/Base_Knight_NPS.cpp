@@ -1,5 +1,4 @@
 ﻿#include "Base_Knight_NPS.h"
-#include "Dialogue_Manager.h"
 
 //------------------------------------------------------------------------------------------------------------
 ABase_Knight_NPS::ABase_Knight_NPS()
@@ -8,19 +7,6 @@ ABase_Knight_NPS::ABase_Knight_NPS()
 
 	// 1. Init Dialogue_Camera	
 	Dialogue_Camera = nullptr;
-}
-//------------------------------------------------------------------------------------------------------------
-void ABase_Knight_NPS::BeginPlay()
-{
-	Super::BeginPlay();
-
-	if (!Dialogue_Camera)
-		UE_LOG(LogTemp, Warning, TEXT("Dialogue camera not set for %s"), *GetName() );
-}
-//------------------------------------------------------------------------------------------------------------
-void ABase_Knight_NPS::Tick(float Delta_Time)
-{
-	Super::Tick(Delta_Time);
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Knight_NPS::Interact()

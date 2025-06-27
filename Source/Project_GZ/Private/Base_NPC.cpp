@@ -26,6 +26,8 @@ void ABase_NPC::BeginPlay()
 
 	Main_Character = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 
+	Can_Interact_Widget_Component->SetVisibility(false);
+
 	OnActorBeginOverlap.AddDynamic(this, &ABase_NPC::On_Begin_Overlap);
 	OnActorEndOverlap.AddDynamic(this, &ABase_NPC::On_End_Overlap);
 }
