@@ -96,6 +96,10 @@ void ABase_Main_Character::Tick(float Delta_Time)
 		if (PC)
 			PC->Set_View_Pitch();
 	}
+
+	// 4. Temp
+	/*FRotator current_rotation = GetActorRotation();
+	UE_LOG(LogTemp, Warning, TEXT("Rotation MC: %s"), *current_rotation.ToString() )*/
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *Player_Input_Component)
@@ -117,6 +121,16 @@ void ABase_Main_Character::SetupPlayerInputComponent(UInputComponent *Player_Inp
 
 	Player_Input_Component->BindAxis("Look_X", this, &ABase_Main_Character::Look_X);
 	Player_Input_Component->BindAxis("Look_Y", this, &ABase_Main_Character::Look_Y);
+}
+//------------------------------------------------------------------------------------------------------------
+void ABase_Main_Character::Restore_After_Dialogue()
+{
+	Camera_Component->Activate();
+	Character_Movement_Component->Activate();
+	bUseControllerRotationYaw = true;
+
+	FRotator desired_rotation = GetActorRotation();
+	Controller->SetControlRotation(desired_rotation);
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_Main_Character::Open_Menu()
@@ -192,10 +206,13 @@ void ABase_Main_Character::Interact_With()
 					target_rotation.Pitch = 0.0f;
 					target_rotation.Roll = 0.0f;
 					SetActorRotation(target_rotation);
+
+					Target_Rotation = target_rotation;
 				}
 
-				PC->bShowMouseCursor = true;
-				PC->SetInputMode(FInputModeUIOnly() );
+				// тимчасово налаштування введення перенесено до Dialogue_Manager у Start_Dialogue
+				//PC->bShowMouseCursor = true;
+				//PC->SetInputMode(FInputModeUIOnly() );
 			}
 			else
 			{

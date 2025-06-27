@@ -31,6 +31,8 @@ public:
 	virtual void Tick(float Delta_Time) override;
 	virtual void SetupPlayerInputComponent(UInputComponent *Player_Input_Component) override;
 
+	void Restore_After_Dialogue();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation") bool Is_Crawling;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Walk_Speed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement") float Crouch_Speed;
@@ -62,6 +64,7 @@ private:
 	void Look_Y(float value);
 
 	bool Wants_To_Uncrouch;
+	FRotator Target_Rotation;
 	ABase_Player_Controller *PC;
 	UUserWidget *Pause_Menu_Instance;
 	UBase_Pause_Menu *Base_Pause_Menu;

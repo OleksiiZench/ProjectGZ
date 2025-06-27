@@ -23,6 +23,12 @@ void UDialogue_Widget::Initialize_Dialogue(const FDialogue_Node &node)
 				Options_Container->AddChild(option_widget);
 			}
 		}
+
+		if (Options_Container->GetChildrenCount() > 0)
+		{
+			if (UWidget *first_child = Options_Container->GetChildAt(0) )
+				first_child->SetKeyboardFocus();
+		}
 	}
 }
 //------------------------------------------------------------------------------------------------------------

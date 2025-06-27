@@ -10,7 +10,12 @@ void UBase_Dialogue_Option::Setup_Option(const FString &option_text, int32 node_
 	Parent_Dialogue_Widget = parent_widget;
 
 	if (Option_Button)
+	{
 		Option_Button->OnClicked.AddDynamic(this, &UBase_Dialogue_Option::On_Button_Clicked);
+
+		Option_Button->SetIsEnabled(true);
+		Option_Button->SetVisibility(ESlateVisibility::Visible);
+	}
 }
 //------------------------------------------------------------------------------------------------------------
 void UBase_Dialogue_Option::On_Button_Clicked()

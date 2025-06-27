@@ -19,6 +19,17 @@ void UDialogue_Manager::Start_Dialogue(ABase_Knight_NPS *npc, UDataTable *dialog
 		if (Dialogue_Widget)
 		{
 			Dialogue_Widget->AddToViewport();
+			
+			if (APlayerController *pc = UGameplayStatics::GetPlayerController(GetWorld(), 0) )
+			{// Налаштування введення
+				FInputModeGameAndUI input_mode;
+				input_mode.SetWidgetToFocus(Dialogue_Widget->TakeWidget() );
+				input_mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+
+				pc->SetInputMode(input_mode);
+				pc->bShowMouseCursor = true;
+			}
+			
 			Dialogue_Widget->On_Option_Selected.AddDynamic(this, &UDialogue_Manager::Advance_Dialogue);
 			Dialogue_Widget->On_Dialogue_Ended.AddDynamic(this, &UDialogue_Manager::End_Dialogue);
 			Show_Dialogue_Node(0);
@@ -39,12 +50,21 @@ void UDialogue_Manager::End_Dialogue()
 		Dialogue_Widget = nullptr;
 	}
 
+	Current_NPC->Can_Interact_Widget_Component->SetVisibility(true);
+
 	Current_NPC = nullptr;
 	Current_Dialogue_Table = nullptr;
 
 	if (APlayerController *pc = UGameplayStatics::GetPlayerController(GetWorld(), 0) )
-	{// Повернення камера до гравця
-		pc->SetViewTargetWithBlend(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0), 1.0f, EViewTargetBlendFunction::VTBlend_Linear);
+	{// Повернення налаштування вводу до початкового
+		pc->SetInputMode(FInputModeGameOnly() );
+		pc->bShowMouseCursor = false;
+
+		if (ABase_Main_Character *main_character = Cast<ABase_Main_Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0) ) )
+		{
+			main_character->Restore_After_Dialogue();
+			pc->SetViewTargetWithBlend(main_character, 1.0f, EViewTargetBlendFunction::VTBlend_Cubic);
+		}
 	}
 }
 //------------------------------------------------------------------------------------------------------------
