@@ -13,7 +13,7 @@
 
 //------------------------------------------------------------------------------------------------------------
 UCLASS(Abstract)
-class PROJECT_GZ_API ABase_NPC : public ACharacter
+class PROJECT_GZ_API ABase_NPC : public ACharacter, public IInteractable
 {
 	GENERATED_BODY()
 
@@ -21,6 +21,8 @@ public:
 	ABase_NPC();
 
 	virtual void BeginPlay() override;
+
+	virtual void Interact() override;
 
 	UFUNCTION() void On_Begin_Overlap(AActor *overlapped_actor, AActor *other_actor);
 	UFUNCTION() void On_End_Overlap(AActor *overlapped_actor, AActor *other_actor);

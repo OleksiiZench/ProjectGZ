@@ -32,6 +32,22 @@ void ABase_NPC::BeginPlay()
 	OnActorEndOverlap.AddDynamic(this, &ABase_NPC::On_End_Overlap);
 }
 //------------------------------------------------------------------------------------------------------------
+void ABase_NPC::Interact()
+{
+	if (UWorld *world = GetWorld() )
+	{
+		UDialogue_Manager *dialogue_manager = NewObject<UDialogue_Manager>(world);
+		if (dialogue_manager)
+		{
+			dialogue_manager->Dialogue_Widget_Class = LoadClass<UDialogue_Widget>(nullptr, TEXT("/Game/Dialogues/WBP_Dialogue.WBP_Dialogue_C") );
+			dialogue_manager->Start_Dialogue(this, Dialogue_Table);
+		}
+
+		if (Can_Interact_Widget_Component)
+			Can_Interact_Widget_Component->SetVisibility(false);
+	}
+}
+//------------------------------------------------------------------------------------------------------------
 void ABase_NPC::On_Begin_Overlap(AActor *overlapped_actor, AActor *other_actor)
 {
 	if(other_actor == Main_Character && Can_Interact_Widget_Component)
