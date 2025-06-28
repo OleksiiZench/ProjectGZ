@@ -1,5 +1,6 @@
-﻿#include "Base_NPC.h"
-#include "Dialogue_Manager.h"
+﻿#include "Dialogue_Manager.h"
+
+#include "Base_NPC.h"
 
 //------------------------------------------------------------------------------------------------------------
 void UDialogue_Manager::Start_Dialogue(ABase_NPC *npc, UDataTable *dialogue_table)
