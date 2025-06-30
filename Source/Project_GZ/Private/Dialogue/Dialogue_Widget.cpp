@@ -1,6 +1,6 @@
-﻿#include "Dialogue_Widget.h"
+﻿#include "Dialogue/Dialogue_Widget.h"
 
-#include "Base_Dialogue_Option.h"
+#include "Dialogue/Base_Dialogue_Option.h"
 
 //------------------------------------------------------------------------------------------------------------
 void UDialogue_Widget::Initialize_Dialogue(const FDialogue_Node &node)

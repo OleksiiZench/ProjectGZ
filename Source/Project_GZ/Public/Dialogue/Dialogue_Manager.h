@@ -4,9 +4,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "UObject/NoExportTypes.h"
 
-#include "Base_Main_Character.h"
-#include "Dialogue_Structs.h"
-#include "Dialogue_Widget.h"
+#include "MC/Base_Main_Character.h"
+#include "Dialogue/Dialogue_Structs.h"
+#include "Dialogue/Dialogue_Widget.h"
 
 #include "Dialogue_Manager.generated.h"
 

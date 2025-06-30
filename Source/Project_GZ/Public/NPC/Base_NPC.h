@@ -7,8 +7,8 @@
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 
-#include "Base_Dialogue_Camera.h"
-#include "Dialogue_Manager.h"
+#include "Dialogue/Base_Dialogue_Camera.h"
+#include "Dialogue/Dialogue_Manager.h"
 
 #include "Base_NPC.generated.h"
 

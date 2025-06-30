@@ -1,4 +1,4 @@
-#include "Base_Dialogue_Option.h"
+#include "Dialogue/Base_Dialogue_Option.h"
 
 //------------------------------------------------------------------------------------------------------------
 void UBase_Dialogue_Option::Setup_Option(const FString &option_text, int32 node_id, UDialogue_Widget *parent_widget)
