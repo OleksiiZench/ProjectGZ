@@ -8,7 +8,7 @@ ABase_NPC::ABase_NPC()
 	Sphere_Component->SetupAttachment(RootComponent);
 	Sphere_Component->SetWorldScale3D(FVector(8.0f));
 
-	// 2. Приєднуємо компонент віджета для відрображення 'F' до сокета голови
+	// 2.1 Приєднуємо компонент віджета для відрображення 'F' до сокета голови
 	Can_Interact_Widget_Component = CreateDefaultSubobject<UWidgetComponent>(TEXT("Can_Interact_Widget") );
 
 	if (GetMesh() )
@@ -18,6 +18,22 @@ ABase_NPC::ABase_NPC()
 		Can_Interact_Widget_Component->SetWidgetClass(Can_Interact_Widget_Class);
 
 	Can_Interact_Widget_Component->SetDrawSize(FVector2D(200.0f, 50.0f));
+	Can_Interact_Widget_Component->SetWidgetSpace(EWidgetSpace::Screen);
+
+	// 2.2 Автоматично встановлюємо WBP_Can_Interact
+	static ConstructorHelpers::FClassFinder<UUserWidget> WidgetClassFinder(TEXT("/Game/UI/BPs_UI/WBP_Can_Interact") );
+	
+	if (WidgetClassFinder.Succeeded() )
+	{
+		Can_Interact_Widget_Class = WidgetClassFinder.Class;
+		Can_Interact_Widget_Component->SetWidgetClass(Can_Interact_Widget_Class);
+	}
+
+	// 3. Налаштовуємо колізію Capsule_Component
+	Capsule_Component = GetCapsuleComponent();
+
+	if (Capsule_Component)
+		Capsule_Component->SetCollisionProfileName(TEXT("BlockAll") );
 }
 //------------------------------------------------------------------------------------------------------------
 void ABase_NPC::BeginPlay()

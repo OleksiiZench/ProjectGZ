@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/Character.h"
@@ -35,5 +36,6 @@ public:
 
 private:
 	ACharacter *Main_Character;
+	UCapsuleComponent *Capsule_Component;
 };
 //------------------------------------------------------------------------------------------------------------
