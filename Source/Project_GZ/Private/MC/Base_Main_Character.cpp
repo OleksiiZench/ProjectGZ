@@ -34,15 +34,14 @@ void ABase_Main_Character::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UUserWidget *crosshair = nullptr;
 	TArray<AActor*> found_actors;
 
 	// 1. Додаємо точку по центру екрану
 	if (Crosshair_Widget_Class)
 	{
-		crosshair = CreateWidget<UUserWidget>(GetWorld(), Crosshair_Widget_Class);
-		if (crosshair)
-			crosshair->AddToViewport();
+		Crosshair_Widget = CreateWidget<UUserWidget>(GetWorld(), Crosshair_Widget_Class);
+		if (Crosshair_Widget)
+			Crosshair_Widget->AddToViewport();
 	}
 
 	// 2. Отримуємо Character_Movement_Component
@@ -126,6 +125,8 @@ void ABase_Main_Character::Restore_After_Dialogue()
 	Camera_Component->Activate();
 	Character_Movement_Component->Activate();
 	bUseControllerRotationYaw = true;
+	Crosshair_Widget->SetVisibility(ESlateVisibility::Visible);
+	EnableInput(PC);
 
 	FRotator desired_rotation = GetActorRotation();
 	Controller->SetControlRotation(desired_rotation);
@@ -182,6 +183,8 @@ void ABase_Main_Character::Interact_With()
 				Character_Movement_Component->Deactivate();
 				Controller->SetControlRotation(FRotator::ZeroRotator);
 				bUseControllerRotationYaw = false;
+				Crosshair_Widget->SetVisibility(ESlateVisibility::Hidden);
+				DisableInput(PC);
 
 				// Механіка розміщення MC (Main Character) перед NPC
 				if (character_npc)

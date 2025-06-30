@@ -66,6 +66,7 @@ private:
 	FRotator Target_Rotation;
 	ABase_Player_Controller *PC;
 	UUserWidget *Pause_Menu_Instance;
+	UUserWidget *Crosshair_Widget;
 	UBase_Pause_Menu *Base_Pause_Menu;
 };
 //------------------------------------------------------------------------------------------------------------
